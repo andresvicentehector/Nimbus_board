@@ -12,6 +12,7 @@ import '../../repository/vias/ViaRepoImp.dart';
 import '../../template/configuration/ConstantesPropias.dart';
 import '../../views/escalarVia/widgets/schema_howtoClimb_wallBuilder/wall15_show.dart';
 import '../../views/escalarVia/widgets/schema_howtoClimb_wallBuilder/wall25_show.dart';
+import 'package:is_lock_screen/is_lock_screen.dart';
 
 class EscalarViaVM extends ChangeNotifier {
   final _myRepo = ViaRepoImp();
@@ -39,6 +40,8 @@ class EscalarViaVM extends ChangeNotifier {
   late int contador = 0;
 
   late Timer timer;
+
+  void initObserverBlockinPage() {}
 
   void _deleteViasMain(ApiResponse<ViaAWS> response) {
     //print("Response :: $response");

@@ -3,6 +3,7 @@ import 'package:Nimbus/views/escalarVia/widgets/escalar_via_form_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
 import 'package:Nimbus/views/editVia/editPresas_screen/edit_presas_screen.dart';
+import 'package:is_lock_screen/is_lock_screen.dart';
 
 import 'package:provider/provider.dart';
 import '../../../models/ListadoVias/AWS/ViaAWS.dart';
@@ -20,7 +21,7 @@ class EscalarVia extends StatefulWidget {
   _EscalarViaState createState() => _EscalarViaState();
 }
 
-class _EscalarViaState extends State<EscalarVia> {
+class _EscalarViaState extends State<EscalarVia> with WidgetsBindingObserver {
   late final _nameController;
   late final _idController;
   late final _autorController;
@@ -38,14 +39,15 @@ class _EscalarViaState extends State<EscalarVia> {
     viewModel.startGoBackHomeTimer(context);
     viewModel.checkDataConnection(context);
     viewModel.connect(widget.server);
-    viewModel.startTimeoutTimer(widget.server);
-    //viewModel.startGoBackHomeTimer(context);
+    // viewModel.startTimeoutTimer(widget.server);
     _nameController = widget.via.name;
     _idController = widget.via.sId;
     _autorController = widget.via.autor;
     _dificultadController = widget.via.dificultad;
     _comentarioController = Text(widget.via.comentario);
     _numPresasController = widget.via.presas.length;
+
+    WidgetsBinding.instance.addObserver(this);
   }
 
   void dispose() {
@@ -63,8 +65,20 @@ class _EscalarViaState extends State<EscalarVia> {
 
     viewModel.contador = 3;
     viewModel.timer.cancel();
-
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) async {
+    super.didChangeAppLifecycleState(state);
+    if (state == AppLifecycleState.inactive) {
+      print('app inactive, is lock screen: ${await isLockScreen()}');
+      viewModel.connection?.dispose();
+    } else if (state == AppLifecycleState.resumed) {
+      print('app resumed');
+      viewModel.connect(widget.server);
+    }
   }
 
   @override
@@ -95,6 +109,7 @@ class _EscalarViaState extends State<EscalarVia> {
                 SizedBox(height: 20.0),
 
                 botoneraCargar(
+                    widget.server,
                     viewModel.isConnected,
                     viewModel.isConnecting,
                     viewModel.connectionFailed,

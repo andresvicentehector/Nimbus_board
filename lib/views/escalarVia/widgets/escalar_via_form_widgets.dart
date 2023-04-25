@@ -1,6 +1,7 @@
 import "package:Nimbus/template/AppContextExtension.dart";
 import 'package:Nimbus/template/colors/ColorsFixed.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import '../../../models/ListadoVias/AWS/ViaAWS.dart';
 import '../../../template/configuration/ConstantesPropias.dart';
@@ -42,8 +43,8 @@ Widget descriptivoVia(dynamic _nameController, _autorController,
   );
 }
 
-Widget botonCargar(bool _isConnected, bool _isConnecting,
-    bool _connectionFailed, BuildContext context) {
+Widget botonCargar(BluetoothDevice? server, bool _isConnected,
+    bool _isConnecting, bool _connectionFailed, BuildContext context) {
   return Container(
       decoration: BoxDecoration(
           color: (_isConnecting
@@ -58,16 +59,18 @@ Widget botonCargar(bool _isConnected, bool _isConnecting,
         children: <Widget>[
           Center(
             child: Text(
-                (_isConnecting
-                    ? context.resources.strings.escalarViaScreenConnecting
-                    : _connectionFailed
-                        ? context.resources.strings
-                            .escalarViaScreenComeBacktoListView
-                        : _isConnected
-                            ? context
-                                .resources.strings.escalarViaScreenButtonClimb
-                            : context.resources.strings
-                                .escalarViaScreenButtonConnect),
+                (server == null
+                    ? context.resources.strings.escalarViaScreenButtonConnect
+                    : (_isConnecting
+                        ? context.resources.strings.escalarViaScreenConnecting
+                        : _connectionFailed
+                            ? context.resources.strings
+                                .escalarViaScreenComeBacktoListView
+                            : _isConnected
+                                ? context.resources.strings
+                                    .escalarViaScreenButtonClimb
+                                : context.resources.strings
+                                    .escalarViaScreenSomeoneisConnected)),
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.tertiary,
                   fontFamily: context.resources.fonts.tittle,
@@ -219,6 +222,7 @@ Widget _buildPopupDialogEliminar(BuildContext context, dynamic _nameController,
 }
 
 Widget botoneraCargar(
+    BluetoothDevice? server,
     bool isConnected,
     bool isConnecting,
     bool connectionFailed,
@@ -233,7 +237,8 @@ Widget botoneraCargar(
           indexData = via.sId;
         }
       },
-      child: botonCargar(isConnected, isConnecting, connectionFailed, context));
+      child: botonCargar(
+          server, isConnected, isConnecting, connectionFailed, context));
 }
 
 Widget esquematicoPared(double width, Widget pared) {

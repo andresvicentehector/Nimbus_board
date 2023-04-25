@@ -125,4 +125,5 @@ abstract class Strings {
 
   String get escalarViaScreenConnecting;
   String get escalarViaScreenComeBacktoListView;
+  String get escalarViaScreenSomeoneisConnected;
 }

@@ -253,4 +253,9 @@ class EnglishStrings implements Strings {
   @override
   String get escalarViaScreenComeBacktoListView =>
       'Go back to the list of routes';
+
+  @override
+  // TODO: implement escalarViaScreenSomeoneisConnected
+  String get escalarViaScreenSomeoneisConnected =>
+      "Someone  is  already  connected";
 }

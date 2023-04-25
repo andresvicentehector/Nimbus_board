@@ -163,7 +163,7 @@ class SpanishStrings implements Strings {
   String get escalarViaScreenButtonClimb => "Cárgala en la pared";
 
   @override
-  String get escalarViaScreenButtonConnect => "Conéctate a la pared";
+  String get escalarViaScreenButtonConnect => "Selecciona el bluetooth";
 
   @override
   String get escalarViaScreenButtonEdit => "Edita tu ";
@@ -255,4 +255,7 @@ class SpanishStrings implements Strings {
   @override
   String get escalarViaScreenComeBacktoListView =>
       'Vuelve a la pantalla anterior';
+
+  @override
+  String get escalarViaScreenSomeoneisConnected => "Alguien  está  conectado";
 }
